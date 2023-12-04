@@ -11,15 +11,21 @@ then
    singularity run docker://parflow/parflow:latest $*
 elif ch-checkns >& /dev/null
 then
-   if [ ! -d $(pwd)/.parflow_image ]
+   #Set Charliecloud install
+   export PARFLOW_CH_INSTALL=$(readlink -f ${0} | xargs dirname)
+   
+   #If install exists skip
+   if [ ! -d $PARFLOW_CH_INSTALL/.parflow_image ]
    then
        echo "running: ch-image pull parflow/parflow"
        ch-image pull parflow/parflow
-       echo "running: ch-convert parflow/parflow $(pwd)/.parflow_image"
-       ch-convert parflow/parflow $(pwd)/.parflow_image
+       echo "running: ch-convert parflow/parflow $PARFLOW_CH_INSTALL/.parflow_image"
+       ch-convert parflow/parflow $PARFLOW_CH_INSTALL/.parflow_image
    fi
-   echo "running: ch-run -w -b $(pwd):/data -c /data --set-env $(pwd)/.parflow_image -- pfrun $*"
-   ch-run -w -b $(pwd):/data -c /data --set-env $(pwd)/.parflow_image -- pfrun $*
+   
+   #Run Parflow
+   echo "running: ch-run -w -b $(pwd):/data -c /data --set-env $PARFLOW_CH_INSTALL/.parflow_image -- pfrun $*"
+   ch-run -w -b $(pwd):/data -c /data --set-env $PARFLOW_CH_INSTALL/.parflow_image -- pfrun $*
 else
    echo "Couldn't run podman, docker, charliecloud, or singularity"
 fi
