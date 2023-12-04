@@ -4,7 +4,7 @@ This is basic setup for running the ParFlow container image.   Running both
 
 Please report issues at the ParFlow issue tracker: https://github.com/parflow/parflow/issues
 
-## Install Docker, Podman, or Singularity
+## Install Docker, Podman, Charliecloud or Singularity
 
 The container image should work with any of the popular systems.   Docker is the most popular but Podman and Singularity have also been used to run this image.
 
